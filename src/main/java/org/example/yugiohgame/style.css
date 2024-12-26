@@ -1,0 +1,9 @@
+.triangle-button {
+    -fx-background-color: inherit;
+     -fx-shape: "M 0 0 L 1 0.5 L 0 1 Z";
+    -fx-padding: 10px;
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}

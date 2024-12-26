@@ -45,6 +45,19 @@ public class Player {
         hand.remove(handIndex);
     }
 
+    public void removeCardFromHand(int index) {
+        if (index >= 0 && index < hand.size()) {
+            hand.remove(index);
+        }
+    }
+
+    public void playCardFromHand(int index) {
+        if (index >= 0 && index < hand.size()) {
+            placeCardOnField(index);
+            hand.remove(index);
+        }
+    }
+
     public void resetBuffer() {
         bufferApplied = false;
     }
