@@ -36,7 +36,7 @@ public class YugiohGameApp extends Application {
     private Game game;
     private Player player1, player2;
     private VBox player1UI, player2UI;
-    private Label playerTurnLabel, player1PhaseLabel, player2PhaseLabel;
+    private Label playerTurnLabel,phaseLabel;
     private Map<String, Image> imageCache = new HashMap<>();
 
     @Override
@@ -70,7 +70,7 @@ public class YugiohGameApp extends Application {
         playerTurnLabel.setFont(new Font("Arial", 16));
         playerTurnLabel.setTextFill(Color.WHITE);
 
-        Label phaseLabel = new Label("Phase: " + game.getCurrentPhase().getClass().getSimpleName());
+        phaseLabel = new Label("Phase: " + game.getCurrentPhase().getClass().getSimpleName());
         phaseLabel.setFont(new Font("Arial", 16));
         phaseLabel.setTextFill(Color.WHITE);
 
@@ -85,6 +85,9 @@ public class YugiohGameApp extends Application {
         primaryStage.setTitle("Yu-Gi-Oh! Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        primaryStage.setFullScreen(true);
+        primaryStage.setFullScreenExitHint("");
 
         updateUI();
     }
@@ -228,11 +231,9 @@ public class YugiohGameApp extends Application {
             Button playButton = new Button("Play");
             Button removeButton = new Button("Remove");
 
-            final int index = i;
-
             playButton.setOnAction(ev -> {
                 runInBackground(() -> {
-                    player.playCardFromHand(index);
+                    player.playCardFromHand(player.getHand().indexOf(card));
                     Platform.runLater(() -> {
                         updateHandUI(handUI, player);
                         updateUI();
@@ -242,7 +243,7 @@ public class YugiohGameApp extends Application {
 
             removeButton.setOnAction(ev -> {
                 runInBackground(() -> {
-                    player.removeCardFromHand(index);
+                    player.removeCardFromHand(player.getHand().indexOf(card));
                     Platform.runLater(() -> updateHandUI(handUI, player));
                 });
             });
@@ -254,6 +255,7 @@ public class YugiohGameApp extends Application {
             handUI.getChildren().add(cardImage);
         }
     }
+
 
 
     private void applyAttackBonus(Player player, int bonus) {
@@ -269,7 +271,7 @@ public class YugiohGameApp extends Application {
         Platform.runLater(() -> {
             updatePlayerUI(player1UI, player1);
             updatePlayerUI(player2UI, player2);
-            //updatePhaseLabel();
+            updatePhaseLabel();
             updateTurnLabel();
         });
     }
@@ -317,17 +319,10 @@ public class YugiohGameApp extends Application {
         }
     }
 
-//    private void updatePhaseLabel() {
-//        String phaseName = game.getCurrentPhase().getClass().getSimpleName();
-//        Player currentPlayer = game.getCurrentPlayer();
-//        if (currentPlayer == player1) {
-//            player1PhaseLabel.setText("Phase: " + phaseName);
-//            player2PhaseLabel.setText("Phase: ");
-//        } else {
-//            player1PhaseLabel.setText("Phase: ");
-//            player2PhaseLabel.setText("Phase: " + phaseName);
-//        }
-//    }
+  private void updatePhaseLabel() {
+       String phaseName = game.getCurrentPhase().getClass().getSimpleName();
+       phaseLabel.setText(phaseName);
+    }
 
     private void updateTurnLabel() {
         Player currentPlayer = game.getCurrentPlayer();
